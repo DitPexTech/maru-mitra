@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maru Mitra — Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --orange:#F97316; --red:#DC2626; --sky:#0284C7; --green:#16A34A; --amber:#D97706; --purple:#7C3AED; --teal:#0D9488; --bg:#F8FAFC; --card:#fff; --border:#E2E8F0; --text:#1E293B; --muted:#64748B; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Mukta', sans-serif; background: var(--bg); color: var(--text); }
+    .top-bar { background: linear-gradient(135deg,#1C1917,#292524); color: #F5F5F4; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+    .top-bar h1 { font-size: 20px; font-weight: 800; }
+    .top-bar a { color: #F97316; text-decoration: none; font-size: 13px; font-weight: 700; }
+    .dash { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px; text-align: center; }
+    .stat-num { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+    .stat-lbl { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; }
+    .stat.heat .stat-num { color: var(--red); }
+    .stat.water .stat-num { color: var(--sky); }
+    .stat.medical .stat-num { color: var(--green); }
+    .stat.sandstorm .stat-num { color: var(--amber); }
+    .stat.total .stat-num { color: var(--orange); }
+    .section-title { font-size: 18px; font-weight: 800; margin-bottom: 12px; }
+    table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+    thead { background: #F1F5F9; }
+    th, td { padding: 12px 14px; font-size: 13px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: 0.04em; }
+    tr:last-child td { border-bottom: none; }
+    .badge { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+    .badge.HEAT { background: #FEE2E2; color: var(--red); }
+    .badge.WATER { background: #DBEAFE; color: var(--sky); }
+    .badge.MEDICAL { background: #DCFCE7; color: var(--green); }
+    .badge.SANDSTORM { background: #FEF3C7; color: var(--amber); }
+    .badge.OTHER { background: #EDE9FE; color: var(--purple); }
+    .badge.HIGH { background: #FEE2E2; color: var(--red); }
+    .badge.MEDIUM { background: #FEF3C7; color: var(--amber); }
+    .badge.LOW { background: #DCFCE7; color: var(--green); }
+    .mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+    .refresh-btn { background: var(--orange); color: white; border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .last-updated { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+<div class="top-bar">
+  <h1>🌵 Maru Mitra — Admin Dashboard</h1>
+  <a href="/">← Back to App</a>
+</div>
+<div class="dash">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+    <div>
+      <div class="section-title">Emergency Overview</div>
+      <div class="last-updated" id="lastUpdated">Loading...</div>
+    </div>
+    <button class="refresh-btn" onclick="loadDashboard()">🔄 Refresh</button>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat total"><div class="stat-num" id="st-total">—</div><div class="stat-lbl">Total Cases</div></div>
+    <div class="stat heat"><div class="stat-num" id="st-heat">—</div><div class="stat-lbl">🔥 Heat</div></div>
+    <div class="stat water"><div class="stat-num" id="st-water">—</div><div class="stat-lbl">💧 Water</div></div>
+    <div class="stat medical"><div class="stat-num" id="st-medical">—</div><div class="stat-lbl">🚑 Medical</div></div>
+    <div class="stat sandstorm"><div class="stat-num" id="st-sandstorm">—</div><div class="stat-lbl">🌪️ Sandstorm</div></div>
+  </div>
+
+  <div class="section-title">Recent Emergency Cases</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Grievance ID</th>
+        <th>Type</th>
+        <th>Severity</th>
+        <th>Language</th>
+        <th>Summary</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody id="casesTable">
+      <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted);">Loading cases...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  async function loadDashboard() {
+    document.getElementById('lastUpdated').textContent = 'Updating...';
+    try {
+      const res = await fetch('/api/dashboard');
+      const data = await res.json();
+      document.getElementById('st-total').textContent = data.total;
+      document.getElementById('st-heat').textContent = data.counts['HEAT'] || 0;
+      document.getElementById('st-water').textContent = data.counts['WATER'] || 0;
+      document.getElementById('st-medical').textContent = data.counts['MEDICAL'] || 0;
+      document.getElementById('st-sandstorm').textContent = data.counts['SANDSTORM'] || 0;
+      const tbody = document.getElementById('casesTable');
+      tbody.innerHTML = data.records.map(r => `
+        <tr>
+          <td class="mono">${r.grievance_id||'—'}</td>
+          <td><span class="badge ${r.type}">${r.type||'—'}</span></td>
+          <td><span class="badge ${r.severity}">${r.severity||'—'}</span></td>
+          <td>${r.language||'—'}</td>
+          <td style="max-width:200px;font-size:12px;">${(r.summary||'—').substring(0,80)}...</td>
+          <td style="font-size:11px;color:var(--muted);">${(r.timestamp||'').substring(0,19)}</td>
+        </tr>
+      `).join('');
+      document.getElementById('lastUpdated').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+    } catch(e) {
+      document.getElementById('casesTable').innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:#DC2626;">Failed to load data. Is the server running?</td></tr>`;
+    }
+  }
+  loadDashboard();
+  setInterval(loadDashboard, 30000); // Auto-refresh every 30s
+</script>
+</body>
+</html>
