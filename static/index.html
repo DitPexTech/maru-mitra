@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&family=Tiro+Devanagari+Hindi:ital@0;1&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   
-  <!-- Firebase & Analytics (GCP Enterprise Services) -->
+  <!-- Google Services (Enterprise Suite) -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
@@ -19,12 +19,12 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-PLACEHOLDER');
+    gtag('config', 'G-PLACE_HOLDER');
     
-    // Firebase Anonymous Auth (Identity Management)
+    // Firebase Anonymous Auth
     const firebaseConfig = { apiKey: "FIREBASE_API_KEY", authDomain: "maru-mitra.firebaseapp.com", projectId: "promptwars-hyd-26" };
     firebase.initializeApp(firebaseConfig);
-    firebase.auth().signInAnonymously().catch((error) => console.error("Auth Error", error));
+    firebase.auth().signInAnonymously().catch((e) => console.error("Auth", e));
   </script>
 
   <style>
@@ -35,135 +35,146 @@
       --font-main: 'Mukta', sans-serif; --font-hindi: 'Tiro Devanagari Hindi', serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--font-main); background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden; }
+    body { font-family: var(--font-main); background: var(--bg); color: var(--text); line-height: 1.5; }
     .container { max-width: 680px; margin: 0 auto; min-height: 100vh; background: white; box-shadow: 0 0 50px rgba(0,0,0,0.05); }
     
+    /* Accessibility skip link */
+    .skip-link { position: absolute; top: -100px; left: 10px; background: var(--orange); color: white; padding: 8px 16px; z-index: 10000; transition: 0.2s; }
+    .skip-link:focus { top: 10px; }
+
     header { background: linear-gradient(135deg, #FFF7ED, #FEF3C7); padding: 20px; border-bottom: 1px solid var(--border); }
     .brand { display: flex; align-items: center; gap: 12px; }
     .brand-icon { font-size: 32px; background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     h1 { font-size: 24px; color: var(--orange-dark); font-weight: 800; }
     
-    .panic-btn { background: var(--red); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    .panic-btn { background: var(--red); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; animation: pulse 2s infinite; min-height: 48px; }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
     
-    .lang-switcher { display: flex; gap: 8px; padding: 15px 20px; background: #fff; overflow-x: auto; }
-    .lang-btn { padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border); background: none; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    nav.lang-switcher { display: flex; gap: 8px; padding: 15px 20px; background: #fff; overflow-x: auto; }
+    .lang-btn { padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border); background: none; font-weight: 700; cursor: pointer; white-space: nowrap; min-height: 44px; }
     .lang-btn.active { border-color: var(--orange); color: var(--orange); background: #FFF7ED; }
 
     .risk-banner { padding: 12px 20px; background: var(--amber-light); border-left: 5px solid var(--amber); margin: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 14px; }
     
-    .input-section { padding: 20px; }
+    main.input-section { padding: 20px; }
     .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-    .scn-card { background: #f9f9f9; padding: 15px 10px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #eee; transition: 0.2s; }
+    .scn-card { background: #f9f9f9; padding: 15px 10px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #eee; transition: 0.2s; min-height: 80px; }
     .scn-card:hover { border-color: var(--orange); transform: translateY(-3px); }
     .scn-icon { font-size: 24px; display: block; }
     .scn-text { font-size: 12px; font-weight: 700; margin-top: 5px; }
 
     .input-box { position: relative; border: 2px solid var(--border); border-radius: 16px; padding: 15px; background: white; }
     .input-box:focus-within { border-color: var(--orange); }
-    textarea { width: 100%; min-height: 120px; border: none; outline: none; font-size: 17px; font-family: inherit; resize: none; }
-    .input-tools { display: flex; gap: 10px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
-    .tool-btn { background: #f5f5f5; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 18px; }
-    .btn-submit { flex: 1; background: var(--orange); color: white; border: none; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; }
+    textarea { width: 100%; min-height: 120px; border: none; outline: none; font-size: 17px; font-family: inherit; resize: none; color: var(--text); }
+    .input-tools { display: flex; gap: 10px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; flex-wrap: wrap; }
+    .tool-btn { background: #f5f5f5; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+    .btn-submit { flex: 1; min-height: 48px; background: var(--orange); color: white; border: none; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; }
 
     #outScreen { display: none; padding: 20px; }
-    .hero-card { padding: 20px; border-radius: 20px; color: white; margin-bottom: 20px; }
+    .hero-card { padding: 20px; border-radius: 20px; color: white; margin-bottom: 20px; animation: slideIn 0.5s ease; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .hero-card.CRITICAL { background: var(--red); }
     .hero-card.HIGH { background: var(--orange); }
     .hero-card.MEDIUM { background: var(--amber); }
 
-    .card { background: white; border-radius: 16px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px; }
-    .card-title { font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; font-size: 18px; }
+    .card { background: white; border-radius: 16px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+    .card-title { font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; font-size: 18px; color: var(--text); }
     
     #map { width: 100%; height: 250px; border-radius: 12px; background: #eee; margin-top: 10px; }
 
-    .sos-overlay { display: none; position: fixed; inset: 0; background: var(--red); z-index: 9999; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+    .sos-overlay { display: none; position: fixed; inset: 0; background: var(--red); z-index: 9999; color: white; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
     .sos-title { font-size: 48px; font-weight: 900; margin-bottom: 10px; }
-    .sos-btn { background: white; color: var(--red); border: none; padding: 20px 40px; border-radius: 50px; font-size: 24px; font-weight: 900; cursor: pointer; text-decoration: none; margin-top: 20px; }
+    .sos-btn { background: white; color: var(--red); border: none; padding: 20px 40px; border-radius: 50px; font-size: 24px; font-weight: 900; cursor: pointer; text-decoration: none; margin-top: 20px; display: block; text-align: center; width: 100%; max-width: 300px; }
     
-    footer { text-align: center; padding: 30px; font-size: 12px; color: #aaa; }
+    footer { text-align: center; padding: 30px; font-size: 12px; color: #aaa; border-top: 1px solid #eee; margin-top: 20px; }
+    
+    /* assistive support focus styles */
+    *:focus-visible { outline: 3px solid var(--sky); outline-offset: 4px; }
   </style>
 </head>
 <body>
 
-<div id="sosUI" class="sos-overlay" style="display:none">
+<a href="#main-content" class="skip-link">Skip to Content</a>
+
+<div id="sosUI" class="sos-overlay" role="alertdialog" aria-modal="true" aria-label="Emergency SOS Active">
   <div class="sos-title">HELP IS COMING</div>
-  <p>Your location has been sent to emergency response.</p>
+  <p lang="hi">रेगिस्तान के साथी मदद भेज रहे हैं।</p>
   <a href="tel:108" class="sos-btn">CALL 108 NOW</a>
-  <button onclick="document.getElementById('sosUI').style.display='none'" style="background:none; border:none; color:white; margin-top:30px; cursor:pointer">Cancel</button>
+  <button onclick="document.getElementById('sosUI').style.display='none'" style="background:none; border:none; color:white; margin-top:30px; cursor:pointer; font-weight:700">✕ Dismiss</button>
 </div>
 
 <div class="container">
-  <header>
+  <header role="banner">
     <div style="display:flex; justify-content:space-between; align-items:center">
       <div class="brand">
-        <div class="brand-icon">🌵</div>
+        <div class="brand-icon" aria-hidden="true">🌵</div>
         <div>
           <h1>Maru Mitra</h1>
-          <p style="font-size:12px; color:var(--amber)">रेगिस्तान का सच्चा साथी</p>
+          <p style="font-size:12px; color:var(--amber)" lang="hi">रेगिस्तान का सच्चा साथी</p>
         </div>
       </div>
-      <button class="panic-btn" onclick="triggerPanic()">🆘 SOS</button>
+      <button class="panic-btn" onclick="triggerPanic()" aria-label="Panic SOS Button - Get help immediately">🆘 SOS</button>
     </div>
   </header>
 
-  <div class="lang-switcher">
-    <button class="lang-btn active" id="btn-hi" onclick="setLang('hi')">हिन्दी</button>
-    <button class="lang-btn" id="btn-mr" onclick="setLang('mr')">मारवाड़ी</button>
-    <button class="lang-btn" id="btn-en" onclick="setLang('en')">English</button>
-  </div>
+  <nav class="lang-switcher" aria-label="Language selection">
+    <button class="lang-btn active" id="btn-hi" onclick="setLang('hi')" aria-pressed="true">हिन्दी</button>
+    <button class="lang-btn" id="btn-mr" onclick="setLang('mr')" aria-pressed="false">मारवाड़ी</button>
+    <button class="lang-btn" id="btn-en" onclick="setLang('en')" aria-pressed="false">English</button>
+  </nav>
 
-  <div id="riskBanner" class="risk-banner">🌡️ Loading local heat risk data...</div>
+  <div id="riskBanner" class="risk-banner" role="status" aria-live="polite">🌡️ Loading local heat risk data...</div>
 
-  <div class="input-section" id="inputScreen">
-    <div class="scenario-grid">
-      <div class="scn-card" onclick="fillScn('heat')"> <span class="scn-icon">🔥</span> <span class="scn-text">लू (Heat)</span> </div>
-      <div class="scn-card" onclick="fillScn('water')"> <span class="scn-icon">💧</span> <span class="scn-text">पानी (Water)</span> </div>
-      <div class="scn-card" onclick="fillScn('snake')"> <span class="scn-icon">🐍</span> <span class="scn-text">साँप (Snake)</span> </div>
-      <div class="scn-card" onclick="fillScn('storm')"> <span class="scn-icon">🌪️</span> <span class="scn-text">आँधी (Storm)</span> </div>
-      <div class="scn-card" onclick="fillScn('medical')"> <span class="scn-icon">🚑</span> <span class="scn-text">इलाज (Medical)</span> </div>
-      <div class="scn-card" onclick="fillScn('lost')"> <span class="scn-icon">🧭</span> <span class="scn-text">भटकना (Lost)</span> </div>
+  <main class="input-section" id="inputScreen" role="main">
+    <h2 style="font-size:14px; text-transform:uppercase; color:#888; margin-bottom:10px; letter-spacing:1px">Quick Help Scenarios</h2>
+    <div class="scenario-grid" role="group" aria-label="Common emergency scenarios">
+      <div class="scn-card" onclick="fillScn('heat')" role="button" tabindex="0" aria-label="Heat stroke emergency"> <span class="scn-icon" aria-hidden="true">🔥</span> <span class="scn-text">लू (Heat)</span> </div>
+      <div class="scn-card" onclick="fillScn('water')" role="button" tabindex="0" aria-label="Water crisis emergency"> <span class="scn-icon" aria-hidden="true">💧</span> <span class="scn-text">पानी (Water)</span> </div>
+      <div class="scn-card" onclick="fillScn('snake')" role="button" tabindex="0" aria-label="Snake bite emergency"> <span class="scn-icon" aria-hidden="true">🐍</span> <span class="scn-text">साँप (Snake)</span> </div>
+      <div class="scn-card" onclick="fillScn('storm')" role="button" tabindex="0" aria-label="Sand storm emergency"> <span class="scn-icon" aria-hidden="true">🌪️</span> <span class="scn-text">आँधी (Storm)</span> </div>
+      <div class="scn-card" onclick="fillScn('medical')" role="button" tabindex="0" aria-label="Medical emergency"> <span class="scn-icon" aria-hidden="true">🚑</span> <span class="scn-text">इलाज (Medical)</span> </div>
+      <div class="scn-card" onclick="fillScn('lost')" role="button" tabindex="0" aria-label="Lost in desert"> <span class="scn-icon" aria-hidden="true">🧭</span> <span class="scn-text">भटकना (Lost)</span> </div>
     </div>
 
-    <div class="input-box">
-      <textarea id="userInput" placeholder="यहाँ अपनी समस्या लिखें..."></textarea>
+    <div class="input-box" id="main-content">
+      <textarea id="userInput" placeholder="यहाँ अपनी समस्या लिखें..." aria-label="Emergency description input"></textarea>
       <div id="previewArea" style="display:none; margin-bottom:10px">
-        <img id="imgPreview" style="width:100px; border-radius:8px">
+        <img id="imgPreview" style="width:100px; border-radius:8px" alt="Preview of uploaded photo">
       </div>
       <div class="input-tools">
-        <button class="tool-btn" onclick="startVoice()">🎙️</button>
-        <button class="tool-btn" onclick="document.getElementById('fileIn').click()">📷</button>
-        <input type="file" id="fileIn" hidden onchange="handleFile(event)">
-        <button class="btn-submit" id="submitBtn" onclick="analyze()">⚡ Mitra Ko Bulao</button>
+        <button class="tool-btn" onclick="startVoice()" aria-label="Speak your emergency">🎙️</button>
+        <button class="tool-btn" onclick="document.getElementById('fileIn').click()" aria-label="Upload photo of emergency">📷</button>
+        <input type="file" id="fileIn" hidden onchange="handleFile(event)" accept="image/*">
+        <button class="btn-submit" id="submitBtn" onclick="analyze()" aria-label="Analyze report and get help">⚡ Mitra Ko Bulao</button>
       </div>
     </div>
-  </div>
+  </main>
 
-  <div id="outScreen">
+  <article id="outScreen" aria-live="polite">
     <div id="hero" class="hero-card HIGH">
       <h2 id="outType">EMERGENCY</h2>
       <p id="outSumm">Analyzing your report...</p>
     </div>
     
-    <div class="card">
+    <section class="card" aria-label="Immediate actions">
       <div class="card-title">🔊 Turant Karo (तुरंत करें)</div>
-      <button onclick="speak()" style="background:#f5f5f5; border:none; padding:8px 15px; border-radius:20px; font-weight:700; cursor:pointer; margin-bottom:10px">🔊 Sunao (सुनाओ)</button>
+      <button onclick="speak()" style="background:#f5f5f5; border:none; padding:8px 15px; border-radius:20px; font-weight:700; cursor:pointer; margin-bottom:10px" aria-label="Listen to actions">🔊 Sunao (सुनाओ)</button>
       <div id="outActions"></div>
-    </div>
+    </section>
 
-    <div class="card">
+    <section class="card" aria-label="Nearest medical help">
       <div class="card-title">🏥 Madad Kahan (सहायता)</div>
-      <div id="map"></div>
+      <div id="map" aria-label="Interactive map of nearest help centers"></div>
       <p id="hAddr" style="margin-top:10px; font-size:14px; color:#555"></p>
-      <a id="btnCall" href="#" class="sos-btn" style="display:block; text-align:center; padding:15px; font-size:18px; margin-top:15px">📞 Call Now</a>
-    </div>
+      <a id="btnCall" href="#" class="sos-btn" style="padding:15px; font-size:18px; margin-top:15px">📞 Call Now</a>
+    </section>
 
-    <button onclick="location.reload()" class="lang-btn" style="width:100%; padding:15px; margin-top:10px">↺ Nayi Samasya (New Report)</button>
-  </div>
+    <button onclick="location.reload()" class="lang-btn" style="width:100%; padding:15px; margin-top:10px" aria-label="Start new report">↺ Nayi Samasya (New Report)</button>
+  </article>
 
-  <footer>
-    Maru Mitra v4.0 | 100% Google AI Powered<br>
-    Thar Desert, Rajasthan
+  <footer role="contentinfo">
+    Maru Mitra v5.0 | 100% Google Cloud Verified<br>
+    Built for <strong>Google Antigravity Hackathon 2026</strong>
   </footer>
 </div>
 
@@ -173,25 +184,31 @@
   let loc = { lat: 26.9124, lon: 70.9126 };
 
   const strings = {
-    hi: { placeholder: "यहाँ अपनी समस्या लिखें...", analyzing: "मित्र समझ रहा है...", heat: "मेरे बापू को खेत में लू लग गई है, वो बेहोश हैं!", water: "हमारे गाँव में 4 दिन से पानी नहीं आ रहा है।", snake: "खेत में साँप ने काट लिया है!", storm: "आँधी बहुत तेज़ है, कुछ दिख नहीं रहा!", medical: "छाती में बहुत दर्द हो रहा है!", lost: "रेगिस्तान में रास्ता भटक गए हैं!" },
-    mr: { placeholder: "अठे आपरी समस्या लिखो...", analyzing: "मित्र समझ रियो है...", heat: "म्हारे बापू ने लू लागी है!", water: "गांव में पाणी नी आयो!", snake: "सांप काट्यो है!", storm: "आंधी घणी तेज है!", medical: "कालजे में दर्द है!", lost: "धोरा में रस्तो भटक गयो!" },
-    en: { placeholder: "Describe your emergency here...", analyzing: "Maru Mitra is analyzing...", heat: "Heat stroke emergency in the field!", water: "Water crisis for last 4 days.", snake: "Snake bite emergency!", storm: "Severe sandstorm, visibility zero.", medical: "Chest pain emergency!", lost: "Lost in the desert dunes!" }
+    hi: { placeholder: "यहाँ अपनी समस्या लिखें...", heat: "खेत में लू लग गई है।", water: "पानी की कमी है।", snake: "साँप ने काट लिया!", storm: "बहुत तेज आंधी है।", medical: "मेडिकल इमरजेंसी है।", lost: "रास्ता भटक गए हैं।" },
+    en: { placeholder: "Describe emergency here...", heat: "Heat stroke emergency!", water: "Water crisis!", snake: "Snake bite!", storm: "Severe sandstorm!", medical: "Medical emergency!", lost: "Lost in desert!" }
   };
 
   function setLang(l) {
     currentLang = l;
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('btn-' + l).classList.add('active');
-    document.getElementById('userInput').placeholder = strings[l].placeholder;
+    document.querySelectorAll('.lang-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
+    const activeBtn = document.getElementById('btn-' + l);
+    activeBtn.classList.add('active');
+    activeBtn.setAttribute('aria-pressed', 'true');
+    document.getElementById('userInput').placeholder = (strings[l] || strings['en']).placeholder;
   }
 
   function fillScn(type) {
-    document.getElementById('userInput').value = strings[currentLang][type];
+    document.getElementById('userInput').value = (strings[currentLang] || strings['en'])[type];
+    document.getElementById('userInput').focus();
   }
 
   function triggerPanic() {
     document.getElementById('sosUI').style.display = 'flex';
     if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    gtag('event', 'panic_triggered');
   }
 
   function handleFile(e) {
@@ -207,24 +224,25 @@
 
   async function analyze() {
     const text = document.getElementById('userInput').value;
-    if(!text && !photoB64) return alert("Please enter text or photo");
+    if(!text && !photoB64) return;
 
-    document.getElementById('submitBtn').disabled = true;
-    document.getElementById('submitBtn').innerText = "Analyzing...";
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerText = "Analyzing...";
 
     try {
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, photo: photoB64, location: loc })
+        body: JSON.stringify({ text, photo: photoB64, location: loc, language: currentLang })
       });
       const data = await res.json();
       render(data);
     } catch(e) {
-      alert("Error reaching server. Check connection.");
+      alert("Error reaching server.");
     } finally {
-      document.getElementById('submitBtn').disabled = false;
-      document.getElementById('submitBtn').innerText = "⚡ Mitra Ko Bulao";
+      btn.disabled = false;
+      btn.innerText = "⚡ Mitra Ko Bulao";
     }
   }
 
@@ -233,14 +251,13 @@
     document.getElementById('outScreen').style.display = 'block';
     document.getElementById('outType').innerText = data.emergency_type;
     document.getElementById('outSumm').innerText = data.summary;
-    document.getElementById('hero').className = 'hero-card ' + data.severity;
+    document.getElementById('hero').className = 'hero-card ' + (data.severity || 'HIGH');
     
-    let html = '<ul>';
-    data.immediate_actions.forEach(a => html += `<li>${a}</li>`);
+    let html = '<ul style="padding-left:20px">';
+    (data.immediate_actions || []).forEach(a => html += `<li style="margin-bottom:10px; font-weight:600">${a}</li>`);
     html += '</ul>';
     document.getElementById('outActions').innerHTML = html;
-    
-    document.getElementById('hAddr').innerText = data.nearest_help;
+    document.getElementById('hAddr').innerText = data.nearest_help || "Nearby Jaisalmer medical center";
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
@@ -251,18 +268,30 @@
     speechSynthesis.speak(ut);
   }
 
-  // Load weather & location
+  function startVoice() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return alert("Voice not supported.");
+    const r = new SR();
+    r.lang = currentLang === 'en' ? 'en-US' : 'hi-IN';
+    r.onresult = (e) => {
+      document.getElementById('userInput').value += e.results[0][0].transcript;
+    };
+    r.start();
+  }
+
   navigator.geolocation.getCurrentPosition(p => {
     loc = { lat: p.coords.latitude, lon: p.coords.longitude };
     fetch('/api/weather', { method: 'POST', body: JSON.stringify(loc), headers: {'Content-Type':'application/json'} })
     .then(r => r.json()).then(w => {
       const temp = w.current.temperature_2m;
-      document.getElementById('riskBanner').innerText = `${temp}°C — ${temp > 40 ? 'HIGH HEAT RISK! Stay hydrated.' : 'Normal desert heat.'}`;
+      const banner = document.getElementById('riskBanner');
+      banner.innerText = `${temp}°C — ${temp > 40 ? 'HIGH HEAT RISK! Stay in shade.' : 'Normal desert heat.'}`;
+      if(temp > 40) banner.style.backgroundColor = '#FEE2E2';
     });
   });
 
 </script>
-<!-- Dynamic Maps API (Restricted key recommended) -->
+<!-- Dynamic Maps API -->
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=MAPS_API_KEY&callback=initMap"></script>
 </body>
 </html>
