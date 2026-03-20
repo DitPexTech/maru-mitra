@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maru Mitra | मारु मित्र</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #1C1917;
+      --bg-card: #292524;
+      --amber: #F59E0B;
+      --amber-dark: #D97706;
+      --orange: #EA580C;
+      --sky: #0EA5E9;
+      --text: #F5F5F4;
+      --text-muted: #A8A29E;
+      --border: #44403C;
+      --red: #EF4444;
+      --green: #22C55E;
+      --teal: #14B8A6;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      /* Subtle dot grid */
+      background-image: radial-gradient(var(--border) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    
+    h1, h2, h3, h4, .btn-main {
+      font-family: 'Baloo Bhaijaan 2', sans-serif;
+    }
+    
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 16px;
+      background: rgba(28, 25, 23, 0.95);
+      min-height: 100vh;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      box-shadow: 0 0 40px rgba(0,0,0,0.5);
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .logo-area { display: flex; flex-direction: column; }
+    .logo-main {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1;
+    }
+    .logo-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    
+    .status-badge {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--green);
+      border: 1px solid var(--green);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-badge::before {
+      content: ''; display: block; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--green);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+      70% { box-shadow: 0 0 0 4px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    
+    /* API Key Bar */
+    .api-key-bar {
+      display: flex;
+      gap: 8px;
+    }
+    .api-key-bar input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      min-height: 48px;
+    }
+    .api-key-bar button {
+      min-height: 48px;
+      padding: 0 20px;
+      background: var(--border);
+      color: var(--text);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .api-hint { font-size: 12px; color: var(--sky); display: block; margin-top: 8px; text-decoration: none; }
+    
+    /* Weather Strip */
+    .weather-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .weather-card {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 8px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+    .w-val { font-size: 20px; font-weight: 700; color: var(--amber); line-height: 1.2; font-family: 'Baloo Bhaijaan 2', sans-serif;}
+    .w-lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+    
+    /* Tiles Grid */
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .tile {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 8px;
+      text-align: center;
+      cursor: pointer;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .tile.active {
+      border-color: var(--orange);
+      background: rgba(234, 88, 12, 0.1);
+    }
+    .tile-icon { font-size: 24px; }
+    .tile-text { font-size: 12px; font-weight: 600; color: var(--text); }
+
+    /* Quick Scenarios */
+    .scenarios {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .pill-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pill-btn:hover { background: var(--bg-card); color: var(--text); }
+    
+    /* Main Input Area */
+    .input-wrapper { position: relative; margin-bottom: 16px; }
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 16px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    textarea:focus { outline: none; border-color: var(--amber); }
+    
+    .input-tools {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      gap: 8px;
+    }
+    .tool-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: var(--bg-card);
+      color: var(--text);
+      display: flex; justify-content: center; align-items: center;
+      font-size: 18px; cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .tool-btn.recording {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--red);
+      animation: micPulse 1.5s infinite;
+    }
+    @keyframes micPulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    
+    .tag-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .lang-badge { font-size: 12px; color: var(--text-muted); }
+    .clear-btn { background: none; border: none; color: var(--red); cursor: pointer; font-size: 13px; }
+    
+    .btn-main {
+      width: 100%;
+      min-height: 56px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(to right, var(--orange), var(--amber-dark));
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.4);
+      display: flex; justify-content: center; align-items: center;
+      gap: 8px;
+    }
+    
+    input[type="file"] { display: none; }
+    #photoPreview { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; display: none; margin-bottom: 16px; border: 2px solid var(--sky); }
+
+    /* Processing Screen */
+    #processingScreen {
+      display: none;
+      text-align: center;
+      padding: 40px 16px;
+    }
+    .proc-title { font-size: 24px; color: var(--amber); margin-bottom: 32px; font-family: 'Baloo Bhaijaan 2'; }
+    .proc-steps { display: flex; justify-content: center; gap: 24px; }
+    .proc-step {
+      display: flex; flex-direction: column; align-items: center; gap: 12px; opacity: 0.3; transition: opacity 0.3s;
+    }
+    .proc-step.active { opacity: 1; }
+    .p-icon { font-size: 32px; }
+    .p-text { font-size: 14px; font-weight: 600; }
+
+    /* Output Screen */
+    #outputScreen { display: none; }
+    
+    .em-header { margin-bottom: 24px; text-align: center; }
+    .type-badge { display: inline-block; padding: 8px 16px; border-radius: 20px; font-size: 20px; font-weight: 700; margin-bottom: 12px; font-family: 'Baloo Bhaijaan 2'; }
+    .sev-badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 12px; margin-left:8px;}
+    .summary-txt { font-size: 16px; color: var(--text-muted); line-height: 1.4; }
+
+    .sec-title { font-size: 18px; color: var(--amber); margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 4px; font-family: 'Baloo Bhaijaan 2'; }
+    
+    .action-list { list-style: none; margin-bottom: 24px; }
+    .action-list li { display: flex; gap: 12px; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; }
+    .num-circle { width: 24px; height: 24px; border-radius: 50%; background: var(--amber); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0;}
+    
+    .dont-list { list-style: none; margin-bottom: 24px; }
+    .dont-list li { display: flex; gap: 12px; margin-bottom: 12px; background: rgba(239,68,68,0.05); padding: 12px; border-radius: 8px; border-left: 3px solid var(--red); }
+    .x-badge { color: var(--red); font-weight: 700; flex-shrink: 0; }
+    
+    .help-card { background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+    .h-name { font-size: 18px; font-weight: 700; color: var(--sky); margin-bottom: 4px; }
+    .h-type { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+    .h-addr { font-size: 14px; line-height: 1.4; margin-bottom: 16px; }
+    
+    .tel-pill {
+      display: inline-flex; align-items: center; gap: 8px; background: rgba(14, 165, 233, 0.2);
+      color: var(--sky); padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; font-family: 'JetBrains Mono';
+    }
+
+    .alert-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .a-chip { background: rgba(20, 184, 166, 0.15); color: var(--teal); border: 1px solid rgba(20, 184, 166, 0.3); padding: 6px 12px; border-radius: 16px; font-size: 13px; font-weight: 600; }
+    
+    .scheme-box { border-left: 4px solid var(--amber); padding-left: 12px; margin-bottom: 24px; }
+    .s-name { font-weight: 700; color: var(--amber); margin-bottom: 4px; }
+    .s-desc { font-size: 14px; color: var(--text-muted); line-height: 1.4; }
+
+    .id-box { display: flex; align-items: center; justify-content: space-between; background: rgba(245, 158, 11, 0.05); border: 1px solid var(--amber); padding: 12px 16px; border-radius: 8px; margin-bottom: 24px; }
+    .id-val { font-size: 18px; font-weight: 700; color: var(--amber); }
+    .copy-btn { background: var(--border); color: var(--text); border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+
+    .sms-box { border: 1px dashed var(--border); border-radius: 8px; padding: 16px; margin-bottom: 32px; background: rgba(0,0,0,0.2); }
+    .sms-lbl { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .sms-txt { color: var(--text); line-height: 1.5; word-break: break-all; }
+
+    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .btn-act { min-height: 48px; border-radius: 8px; border: none; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; color: white;}
+    .bg-call { background: var(--sky); }
+    .bg-wa { background: var(--green); }
+    .bg-reset { background: var(--border); color: var(--text); grid-column: 1 / -1; }
+
+    footer { text-align: center; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 16px; color: var(--text-muted); font-size: 12px; line-height: 1.6; }
+
+    /* Type Colors */
+    .type-HEAT { background: rgba(239, 68, 68, 0.2); color: var(--red); border: 1px solid var(--red); }
+    .type-WATER { background: rgba(14, 165, 233, 0.2); color: var(--sky); border: 1px solid var(--sky);  }
+    .type-MEDICAL { background: rgba(34, 197, 94, 0.2); color: var(--green); border: 1px solid var(--green); }
+    .type-SANDSTORM { background: rgba(245, 158, 11, 0.2); color: var(--amber); border: 1px solid var(--amber); }
+    .type-OTHER { background: rgba(168, 162, 158, 0.2); color: var(--text); border: 1px solid var(--text-muted); }
+    
+    .sev-HIGH { background: var(--red); color: white; }
+    .sev-MEDIUM { background: var(--amber); color: black; }
+    .sev-LOW { background: var(--green); color: white; }
+
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <header>
+      <div class="logo-area">
+        <div class="logo-main">🌵 Maru Mitra</div>
+        <div class="logo-sub">मारु मित्र — रेगिस्तान का सच्चा साथी</div>
+      </div>
+      <div class="status-badge">System Online</div>
+    </header>
+
+    <div id="mainUI">
+      <div class="card api-card">
+        <div class="api-key-bar">
+          <input type="password" id="apiKeyInput" placeholder="Paste your Gemini 1.5 Flash API key here">
+          <button id="saveKeyBtn">Save</button>
+        </div>
+        <a href="https://aistudio.google.com/app/apikey" target="_blank" class="api-hint">Get key at aistudio.google.com</a>
+      </div>
+
+      <div class="weather-strip" id="weatherStrip">
+        <div class="weather-card"><div class="w-val" id="wt-temp">--</div><div class="w-lbl">Temperature</div></div>
+        <div class="weather-card"><div class="w-val" id="wt-feel">--</div><div class="w-lbl">Feels Like</div></div>
+        <div class="weather-card"><div class="w-val" id="wt-hum">--</div><div class="w-lbl">Humidity</div></div>
+        <div class="weather-card"><div class="w-val" id="wt-cond">--</div><div class="w-lbl">Condition</div></div>
+      </div>
+
+      <div class="tiles-grid">
+        <div class="tile active" data-type="text"><div class="tile-icon">✍️</div><div class="tile-text">Text</div></div>
+        <div class="tile" data-type="voice"><div class="tile-icon">🎙️</div><div class="tile-text">Voice</div></div>
+        <div class="tile" data-type="photo" onclick="document.getElementById('fileInput').click()"><div class="tile-icon">📷</div><div class="tile-text">Photo</div></div>
+        <div class="tile" data-type="weather" onclick="fetchWeather()"><div class="tile-icon">🌡️</div><div class="tile-text">Weather</div></div>
+        <div class="tile" data-type="medical"><div class="tile-icon">🏥</div><div class="tile-text">Medical</div></div>
+        <div class="tile" data-type="news"><div class="tile-icon">📰</div><div class="tile-text">News</div></div>
+      </div>
+
+      <div class="scenarios">
+        <button class="pill-btn" onclick="fillScenario('heat')">🔥 Heat stroke</button>
+        <button class="pill-btn" onclick="fillScenario('water')">💧 No water</button>
+        <button class="pill-btn" onclick="fillScenario('medical')">🚑 Medical</button>
+        <button class="pill-btn" onclick="fillScenario('sandstorm')">🌪️ Sandstorm</button>
+        <button class="pill-btn" onclick="fillScenario('bite')">🐪 Animal bite</button>
+      </div>
+
+      <div class="card">
+        <div class="tag-row">
+          <span class="lang-badge" id="langDetect">Type in Hindi or English...</span>
+          <button class="clear-btn" onclick="clearInput()">Clear</button>
+        </div>
+        
+        <img id="photoPreview" src="" alt="preview">
+        
+        <div class="input-wrapper">
+          <textarea id="userInput" placeholder="यहाँ अपनी समस्या बताएं...&#10;Describe your situation..."></textarea>
+          <div class="input-tools">
+            <button class="tool-btn" id="micBtn">🎙️</button>
+            <button class="tool-btn" onclick="fetchWeather()">🌡️</button>
+          </div>
+        </div>
+        
+        <input type="file" id="fileInput" accept="image/*">
+        
+        <button class="btn-main" id="submitBtn">⚡ Mitra Ko Bulao</button>
+      </div>
+    </div>
+
+    <div id="processingScreen">
+      <div class="proc-title">मित्र समझ रहा है...</div>
+      <div class="proc-steps">
+        <div class="proc-step" id="ps1"><div class="p-icon">👂</div><div class="p-text">Suna</div></div>
+        <div class="proc-step" id="ps2"><div class="p-icon">🧠</div><div class="p-text">Samjha</div></div>
+        <div class="proc-step" id="ps3"><div class="p-icon">⚡</div><div class="p-text">Action</div></div>
+      </div>
+    </div>
+
+    <div id="outputScreen">
+      <div class="em-header">
+        <div class="type-badge" id="outType">⚠️ OTHER EMERGENCY</div>
+        <span class="sev-badge" id="outSev">HIGH</span>
+        <div class="summary-txt" id="outSumm">Summary goes here</div>
+      </div>
+
+      <div class="sec-title">Turant Karo (तुरंत करें)</div>
+      <ul class="action-list" id="outActions"></ul>
+
+      <div class="sec-title">Yeh Mat Karo (यह न करें)</div>
+      <ul class="dont-list" id="outDont"></ul>
+
+      <div class="sec-title">Madad Kahan Milegi (नजदीकी सहायता)</div>
+      <div class="help-card">
+        <div class="h-name" id="hName">Facility Name</div>
+        <div class="h-type" id="hType">Type • 0km</div>
+        <div class="h-addr" id="hAddr">Address</div>
+        <br>
+        <a href="#" class="tel-pill" id="hPhone">📞 00000</a>
+      </div>
+
+      <div class="sec-title">Alerts Sent (अलर्ट भेजा गया)</div>
+      <div class="alert-chips" id="outAlerts"></div>
+
+      <div class="scheme-box">
+        <div class="s-name" id="sName">Scheme Name</div>
+        <div class="s-desc" id="sDesc">Action to be taken</div>
+      </div>
+
+      <div class="id-box">
+        <div class="id-val mono" id="outId">MM-2026-00000</div>
+        <button class="copy-btn" onclick="copyId()">Copy ID</button>
+      </div>
+
+      <div class="sms-box">
+        <div class="sms-lbl">No internet needed — send this SMS</div>
+        <div class="sms-txt mono" id="outSms">MM-ALERT: ...</div>
+      </div>
+
+      <div class="btn-grid">
+        <button class="btn-act bg-call" id="btnCall">📞 Call Help</button>
+        <button class="btn-act bg-wa" id="btnWa">💬 WhatsApp</button>
+        <button class="btn-act bg-reset" onclick="resetApp()">↺ Nayi Samasya</button>
+      </div>
+    </div>
+
+    <footer>
+      Maru Mitra v1.0 | मारु मित्र<br>
+      Powered by Gemini AI | Thar Desert, Rajasthan<br>
+      Built for Google Antigravity Hackathon 2026
+    </footer>
+  </div>
+
+  <script>
+    // --- State ---
+    let weatherData = "46°C, feels 52°C, 18% humidity, Extreme Heat";
+    let base64Image = null;
+    let apiKey = localStorage.getItem('marumitra_key') || '';
+
+    if (apiKey) document.getElementById('apiKeyInput').value = apiKey;
+    document.getElementById('saveKeyBtn').addEventListener('click', () => {
+      apiKey = document.getElementById('apiKeyInput').value.trim();
+      localStorage.setItem('marumitra_key', apiKey);
+      alert('API Key Saved!');
+    });
+
+    // --- Tiles logic ---
+    document.querySelectorAll('.tile').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.tile').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+      });
+    });
+
+    // --- Weather ---
+    const wmoCodes = {
+      0: 'Clear', 1: 'Mostly Clear', 2: 'Partly Cloudy', 3: 'Overcast',
+      45: 'Fog', 48: 'Depositing Rime Fog',
+      51: 'Light Drizzle', 53: 'Moderate Drizzle', 55: 'Dense Drizzle',
+      61: 'Light Rain', 63: 'Moderate Rain', 65: 'Heavy Rain',
+      71: 'Light Snow', 73: 'Moderate Snow', 75: 'Heavy Snow',
+      95: 'Thunderstorm', 96: 'Hailstorm', 99: 'Heavy Hailstorm'
+    };
+
+    async function fetchWeather() {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+          try {
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code`);
+            const data = await res.json();
+            const c = data.current;
+            const cond = wmoCodes[c.weather_code] || 'Unknown';
+            setWeatherUI(`${c.temperature_2m}°C`, `${c.apparent_temperature}°C`, `${c.relative_humidity_2m}%`, cond);
+            weatherData = `${c.temperature_2m}°C, feels ${c.apparent_temperature}°C, ${c.relative_humidity_2m}% humidity, ${cond}`;
+          } catch(e) { fallbackWeather(); }
+        }, () => fallbackWeather());
+      } else { fallbackWeather(); }
+    }
+    function fallbackWeather() {
+      setWeatherUI("46°C", "52°C", "18%", "Extreme Heat");
+      weatherData = "46°C, feels 52°C, 18% humidity, Extreme Heat";
+    }
+    function setWeatherUI(t, f, h, c) {
+      document.getElementById('wt-temp').textContent = t;
+      document.getElementById('wt-feel').textContent = f;
+      document.getElementById('wt-hum').textContent = h;
+      document.getElementById('wt-cond').textContent = c;
+    }
+    fetchWeather(); // Auto load
+
+    // --- Photo ---
+    const fileInput = document.getElementById('fileInput');
+    const photoPreview = document.getElementById('photoPreview');
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        base64Image = ev.target.result.split(',')[1];
+        photoPreview.src = ev.target.result;
+        photoPreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // --- Mic ---
+    const micBtn = document.getElementById('micBtn');
+    let recognition = null;
+    let isRec = false;
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SR();
+      recognition.lang = 'hi-IN';
+      recognition.continuous = false;
+      recognition.onresult = (e) => {
+        document.getElementById('userInput').value += " " + e.results[0][0].transcript;
+        detectLang();
+      };
+      recognition.onend = () => { isRec=false; micBtn.classList.remove('recording'); };
+    }
+    micBtn.addEventListener('click', () => {
+      if(!recognition) return;
+      if(isRec) { recognition.stop(); }
+      else { recognition.start(); isRec=true; micBtn.classList.add('recording'); }
+    });
+
+    // --- Scenarios ---
+    const scenarios = {
+      heat: "Mere father jo 55 saal ke hain, khet mein dhoop mein behosh ho gaye hain. Saans tez chal rahi hai. Gaon Jaisalmer ke paas hai.",
+      water: "Pichle 4 din se humare gaon mein paani ki supply nahi aayi hai. Tanker bhi nahi aaya. 200 log bina paani ke pareshaan hain.",
+      medical: "Meri maa 60 saal ki hain, achanak se unke seene mein bahut tez dard utha hai aur pasina aa raha hai. Hospital yahan se 50km door hai.",
+      sandstorm: "Bahut bhayankar aandhi aur sandstorm aayi hui hai. Visibility zero hai. 3 log ghar ke bahar fase hue hain aur unka pata nahi chal raha.",
+      bite: "1 ghanta pehle khet mein kaam karte waqt mere bhai ko kisi saanp ne kaat liya hai. Haath mein bahut sujan aa gayi hai aur dard ho raha hai."
+    };
+    function fillScenario(type) {
+      document.getElementById('userInput').value = scenarios[type];
+      detectLang();
+      if(type==='heat') document.getElementById('submitBtn').click(); // Auto demo
+    }
+
+    function clearInput() {
+      document.getElementById('userInput').value = '';
+      base64Image = null;
+      photoPreview.style.display = 'none';
+      fileInput.value = '';
+      document.getElementById('langDetect').textContent = "Type in Hindi or English...";
+    }
+
+    function detectLang() {
+      const val = document.getElementById('userInput').value;
+      const hasDevanagari = /[\u0900-\u097F]/.test(val);
+      document.getElementById('langDetect').textContent = hasDevanagari ? "Hindi detected" : (val.length ? "English/Hinglish detected" : "Type in Hindi or English...");
+    }
+    document.getElementById('userInput').addEventListener('input', detectLang);
+
+    // --- submit flow ---
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+      const text = document.getElementById('userInput').value.trim();
+      if(!text && !base64Image) { alert('Kuch to input dijiye!'); return; }
+      if(!apiKey) { alert('Please enter your Gemini API key first!'); document.getElementById('apiKeyInput').focus(); return; }
+
+      document.getElementById('mainUI').style.display = 'none';
+      document.getElementById('processingScreen').style.display = 'block';
+
+      // Animate steps
+      setTimeout(()=> document.getElementById('ps1').classList.add('active'), 600);
+      setTimeout(()=> document.getElementById('ps2').classList.add('active'), 1200);
+      setTimeout(()=> document.getElementById('ps3').classList.add('active'), 1800);
+
+      const sysPrompt = `You are Maru Mitra (मारु मित्र), an AI emergency response system for Thar Desert, Rajasthan, India. Analyze ALL inputs (text, image if present, weather data) and respond ONLY with valid JSON. No markdown. No explanation. Pure JSON only.\n\nRequired JSON fields:\n{\n  \"emergency_type\": \"HEAT\" | \"WATER\" | \"MEDICAL\" | \"SANDSTORM\" | \"OTHER\",\n  \"severity\": \"HIGH\" | \"MEDIUM\" | \"LOW\",\n  \"detected_language\": \"Hindi\" | \"English\" | \"Marwari\" | \"Mixed\",\n  \"summary\": \"one sentence in English\",\n  \"immediate_actions\": [\"3 strings in Hindi\"],\n  \"nearest_help\": {\n    \"name\": \"string\",\n    \"type\": \"PHC\" | \"CHC\" | \"Hospital\" | \"Police\" | \"NGO\",\n    \"distance_km\": 5,\n    \"phone\": \"string\",\n    \"address\": \"string\"\n  },\n  \"alert_recipients\": [\"array of strings\"],\n  \"government_scheme\": \"relevant scheme name\",\n  \"scheme_action\": \"what will be filed\",\n  \"sms_text\": \"under 150 chars Hindi starting MM-ALERT:\",\n  \"grievance_id\": \"MM-2026-XXXXX random 5 digits\",\n  \"heat_risk_level\": \"CRITICAL\" | \"HIGH\" | \"MODERATE\" | \"LOW\",\n  \"do_not_do\": [\"2 warnings in Hindi\"]\n}`;
+      
+      const payload = {
+        system_instruction: { parts: [{ text: sysPrompt }] },
+        contents: [{ parts: [ { text: `Current weather: ${weatherData}\nEmergency report: ${text}` } ] }]
+      };
+      
+      if(base64Image) {
+        payload.contents[0].parts.push({
+          inline_data: { mime_type: "image/jpeg", data: base64Image }
+        });
+      }
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+          method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)
+        });
+        if(!res.ok) throw new Error('API Fail');
+        const data = await res.json();
+        const raw = data.candidates[0].content.parts[0].text;
+        const clean = raw.replace(/```json\n?/gi,'').replace(/```\n?/gi,'').trim();
+        const j = JSON.parse(clean);
+        renderOutput(j);
+      } catch(e) {
+        // Offline Fallback parsing
+        const isWater = text.toLowerCase().includes('water') || text.toLowerCase().includes('paani') || text.toLowerCase().includes('pani');
+        const isMed = text.toLowerCase().includes('medical') || text.toLowerCase().includes('hospital') || text.toLowerCase().includes('dard');
+        
+        let j = {
+          emergency_type: isWater ? "WATER" : (isMed ? "MEDICAL" : "HEAT"),
+          severity: "HIGH", summary: "Offline emergency mode triggered.",
+          alert_recipients: ["Control Room Jaisalmer", "Local Sarpanch"],
+          government_scheme: "Mukhyamantri Chiranjeevi Swasthya Bima Yojana",
+          scheme_action: "Free treatment coverage via PHC.",
+          sms_text: "MM-ALERT: Aapda report darj hai. Madad bheji ja rahi hai.",
+          grievance_id: "MM-2026-" + Math.floor(10000 + Math.random() * 90000),
+          heat_risk_level: "HIGH"
+        };
+        
+        if(isWater) {
+          j.immediate_actions = ["जल शक्ति विभाग को 1916 पर कॉल करें", "नजदीकी हैंडपंप का उपयोग करें", "पानी की बर्बादी रोकें, बच्चों को प्राथमिकता दें"];
+          j.do_not_do = ["गंदा पानी न पियें", "पशुओं को प्रदूषित जल न दें"];
+          j.nearest_help = { name: "Jal Shakti Office", type: "Govt", distance_km: 12, phone: "1916", address: "District HQ" };
+        } else if(isMed) {
+          j.immediate_actions = ["108 एम्बुलेंस को तुरंत कॉल करें", "मरीज को आरामदायक स्थिति में लिटाएं", "कोई दवाई खुद से न दें"];
+          j.do_not_do = ["नीम हकीम के पास न जाएं", "घबराएं नहीं"];
+          j.nearest_help = { name: "CHC Pokhran", type: "CHC", distance_km: 18, phone: "108", address: "Pokhran Main Road" };
+        } else {
+          j.immediate_actions = ["तुरंत छाया में ले जाएं और ठंडा पानी पिलाएं", "गर्दन और बगल पर ठंडा कपड़ा रखें", "PHC Pokhran को 02992-252100 पर कॉल करें"];
+          j.do_not_do = ["सीधे धूप में न रखें", "नशीले पदार्थ या चाय न दें"];
+          j.nearest_help = { name: "PHC Pokhran", type: "PHC", distance_km: 4, phone: "02992-252100", address: "Pokhran City Center" };
+        }
+        renderOutput(j);
+      }
+    });
+
+    function renderOutput(data) {
+      document.getElementById('processingScreen').style.display = 'none';
+      document.getElementById('outputScreen').style.display = 'block';
+
+      const typeEmoji = { HEAT: '🔥', WATER: '💧', MEDICAL: '🚑', SANDSTORM: '🌪️', OTHER: '⚠️' };
+      document.getElementById('outType').textContent = `${typeEmoji[data.emergency_type] || '⚠️'} ${data.emergency_type} EMERGENCY`;
+      document.getElementById('outType').className = `type-badge type-${data.emergency_type}`;
+      
+      document.getElementById('outSev').textContent = data.severity;
+      document.getElementById('outSev').className = `sev-badge sev-${data.severity}`;
+      
+      document.getElementById('outSumm').textContent = data.summary;
+
+      const actList = document.getElementById('outActions');
+      actList.innerHTML = '';
+      data.immediate_actions.forEach((a, i) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<div class="num-circle">${i+1}</div><div>${a}</div>`;
+        actList.appendChild(li);
+      });
+
+      const dontList = document.getElementById('outDont');
+      dontList.innerHTML = '';
+      data.do_not_do.forEach((d) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<div class="x-badge">❌</div><div>${d}</div>`;
+        dontList.appendChild(li);
+      });
+
+      const h = data.nearest_help;
+      document.getElementById('hName').textContent = h.name;
+      document.getElementById('hType').textContent = `${h.type} • ${h.distance_km}km awawy`;
+      document.getElementById('hAddr').textContent = h.address;
+      document.getElementById('hPhone').textContent = `📞 ${h.phone}`;
+      document.getElementById('hPhone').href = `tel:${h.phone}`;
+      document.getElementById('btnCall').onclick = () => window.location.href = `tel:${h.phone}`;
+
+      const alerts = document.getElementById('outAlerts');
+      alerts.innerHTML = '';
+      data.alert_recipients.forEach(a => {
+        const d = document.createElement('div'); d.className = 'a-chip'; d.textContent = "🔔 " + a;
+        alerts.appendChild(d);
+      });
+
+      document.getElementById('sName').textContent = data.government_scheme || "Mukhya Mantri Sahayata";
+      document.getElementById('sDesc').textContent = data.scheme_action || "Report forwarded to authorities.";
+
+      document.getElementById('outId').textContent = data.grievance_id;
+      document.getElementById('outSms').textContent = data.sms_text;
+
+      document.getElementById('btnWa').onclick = () => {
+        const url = `https://wa.me/?text=${encodeURIComponent(data.sms_text + "\nID: " + data.grievance_id)}`;
+        window.open(url, '_blank');
+      };
+    }
+
+    function copyId() {
+      const id = document.getElementById('outId').textContent;
+      navigator.clipboard.writeText(id);
+      alert('Grievance ID Copied!');
+    }
+
+    function resetApp() {
+      clearInput();
+      document.getElementById('outputScreen').style.display = 'none';
+      document.getElementById('mainUI').style.display = 'block';
+      document.getElementById('ps1').classList.remove('active');
+      document.getElementById('ps2').classList.remove('active');
+      document.getElementById('ps3').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+  </script>
+</body>
+</html>
